@@ -1,0 +1,32 @@
+{
+  "name": "country-ai-backend",
+  "version": "1.0.0",
+  "description": "Backend AI for country-ai project",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aufasyaihan/country-ai-backend.git"
+  },
+  "keywords": [
+    "javascript",
+    "nvidia",
+    "nim",
+    "api"
+  ],
+  "author": "Aufa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aufasyaihan/country-ai-backend/issues"
+  },
+  "homepage": "https://github.com/aufasyaihan/country-ai-backend#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "openai": "^4.82.0"
+  }
+}
