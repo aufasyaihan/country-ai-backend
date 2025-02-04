@@ -14,18 +14,24 @@ const openai = new OpenAI({
     baseURL: process.env.NVIDIA_NIM_BASEURL,
 });
 
-app.use(
-    cors({
-        origin: "*",
-        methods: "GET,POST",
-        allowedHeaders: "Content-Type,Authorization",
-    })
-);
+app.use((_, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*"); 
+    res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    next();
+});
+
+app.use(cors());
+
 
 app.use(express.json());
 
 app.post("/chat", async (req: any, res: any) => {
     const { messages, context } = req.body;
+
+    res.setTimeout(29000, () => { 
+        res.status(504).json({ error: "Request timed out" });
+    });
 
     if (!messages || messages.length === 0) {
         return res.status(400).json({ error: "Messages history is required" });
