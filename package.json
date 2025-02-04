@@ -2,10 +2,10 @@
   "name": "country-ai-backend",
   "version": "1.0.0",
   "description": "Backend AI for country-ai project",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "npm run test",
-    "start": "node src/index.js"
+    "start": "npx ts-node api/index.ts"
   },
   "repository": {
     "type": "git",
@@ -28,5 +28,11 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "openai": "^4.82.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
   }
 }

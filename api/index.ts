@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import OpenAI from "openai";
 import dotenv from "dotenv";
+import { Languages, Message } from "../types/types";
 
 const app = express();
 
@@ -23,7 +24,7 @@ app.use(
 
 app.use(express.json());
 
-app.post("/chat", async (req, res) => {
+app.post("/chat", async (req: any, res: any) => {
     const { messages, context } = req.body;
 
     if (!messages || messages.length === 0) {
@@ -36,13 +37,16 @@ app.post("/chat", async (req, res) => {
           }. The capital is ${context.capital}, the currency is ${
               context.currency
           }, and the primary language is ${context.languages
-              ?.map((lang) => lang.name)
+              ?.map((lang: Languages) => lang.name)
               .join(", ")}.`
         : "";
 
-    const chatHistory = [
+    const chatHistory: Message[] = [
         { role: "system", content: countryContext },
-        ...messages.map((msg) => ({ role: msg.role, content: msg.content })),
+        ...messages.map((msg: Message) => ({
+            role: msg.role,
+            content: msg.content,
+        })),
     ];
 
     try {
@@ -66,4 +70,6 @@ app.post("/chat", async (req, res) => {
     }
 });
 
-app.listen(port);
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
