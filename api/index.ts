@@ -1,12 +1,9 @@
 import express from "express";
 import cors from "cors";
 import OpenAI from "openai";
-import dotenv from "dotenv";
 import { Languages, Message } from "../types/types";
 
 const app = express();
-
-dotenv.config();
 
 const port = process.env.PORT || 3000;
 const openai = new OpenAI({
