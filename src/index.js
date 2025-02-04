@@ -4,19 +4,19 @@ import OpenAI from "openai";
 import dotenv from "dotenv";
 
 const app = express();
-const port = 3000;
 
 dotenv.config();
 
+const port = process.env.PORT || 3000;
 const openai = new OpenAI({
-    apiKey: process.env.VITE_NVIDIA_NIM_API_KEY,
-    baseURL: process.env.VITE_NVIDIA_NIM_BASEURL,
+    apiKey: process.env.NVIDIA_NIM_API_KEY,
+    baseURL: process.env.NVIDIA_NIM_BASEURL,
 });
 
 app.use(
     cors({
-        origin: "http://localhost:5173",
-        methods: "GET,POST",
+        origin: ["http://localhost:5173", "https://country-ai.vercel.app"],
+        methods: "POST",
         allowedHeaders: "Content-Type,Authorization",
     })
 );
@@ -42,7 +42,7 @@ app.post("/chat", async (req, res) => {
 
     const chatHistory = [
         { role: "system", content: countryContext },
-        ...messages.map((msg) => ({ role: msg.role, content: msg.content })), 
+        ...messages.map((msg) => ({ role: msg.role, content: msg.content })),
     ];
 
     try {
@@ -66,4 +66,6 @@ app.post("/chat", async (req, res) => {
     }
 });
 
-app.listen(port);
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
