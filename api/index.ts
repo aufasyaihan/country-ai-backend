@@ -16,8 +16,8 @@ const openai = new OpenAI({
 
 app.use(
     cors({
-        origin: ["http://localhost:5173", "https://country-ai.vercel.app"],
-        methods: "POST",
+        origin: "*",
+        methods: "GET,POST",
         allowedHeaders: "Content-Type,Authorization",
     })
 );
@@ -56,13 +56,11 @@ app.post("/chat", async (req: any, res: any) => {
             temperature: 0.2,
             top_p: 0.7,
             max_tokens: 1024,
-            stream: true,
+            stream: false,
         });
 
         let responseContent = "";
-        for await (const chunk of completion) {
-            responseContent += chunk.choices[0]?.delta?.content || "";
-        }
+        responseContent += completion.choices[0]?.message?.content || "";
 
         res.json({ response: responseContent });
     } catch (error) {
