@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import OpenAI from "openai";
-import { Languages, Message } from "../types/types";
+import { ManyDetails, Message } from "../types/types";
 
 const app = express();
 
@@ -12,7 +12,7 @@ const openai = new OpenAI({
 });
 
 app.use((_, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*"); 
+    res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
     next();
@@ -20,13 +20,12 @@ app.use((_, res, next) => {
 
 app.use(cors());
 
-
 app.use(express.json());
 
 app.post("/chat", async (req: any, res: any) => {
     const { messages, context } = req.body;
 
-    res.setTimeout(29000, () => { 
+    res.setTimeout(29000, () => {
         res.status(504).json({ error: "Request timed out" });
     });
 
@@ -35,13 +34,29 @@ app.post("/chat", async (req: any, res: any) => {
     }
 
     const countryContext = context
-        ? `You are speaking about the country: ${
-              context.name
-          }. The capital is ${context.capital}, the currency is ${
-              context.currency
-          }, and the primary language is ${context.languages
-              ?.map((lang: Languages) => lang.name)
-              .join(", ")}.`
+        ? `You are speaking about the country: ${context.name}.` +
+          (context.capital ? ` The capital is ${context.capital}.` : "") +
+          (context.currency ? ` The currency is ${context.currency}.` : "") +
+          (context.languages?.length
+              ? ` The primary language(s) spoken: ${context.languages
+                    .map((lang: { name: string }) => lang.name)
+                    .join(", ")}.`
+              : "") +
+          (context.emoji ? ` Flag: ${context.emoji}.` : "") +
+          (context.awsRegion ? ` AWS Region: format this to region(${context.awsRegion}).` : "") +
+          (context.native ? ` Native name: ${context.native}.` : "") +
+          (context.phone ? ` Phone code: +${context.phone}.` : "") +
+          (context.continent ? ` Located in ${context.continent.name}.` : "") +
+          (context.states?.length
+              ? ` States: ${context.states
+                    .map((state: ManyDetails) => state.name)
+                    .join(", ")}.`
+              : "") +
+          (context.subdivisions?.length
+              ? ` Subdivisions: ${context.subdivisions
+                    .map((sub: ManyDetails) => sub.name)
+                    .join(", ")}.`
+              : "")
         : "";
 
     const chatHistory: Message[] = [

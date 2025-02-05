@@ -10,6 +10,6 @@ export interface CountryContext {
     languages?: { name: string }[];
 }
 
-export interface Languages {
+export interface ManyDetails {
     name: string;
 }
